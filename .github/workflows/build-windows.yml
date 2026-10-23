@@ -1,0 +1,34 @@
+name: Build Windows Installer
+
+# Builds the Tech Lyfe TT POS desktop installer (.exe) on a real Windows runner
+# and publishes it to a GitHub Release. Triggered by pushing a version tag
+# (e.g. v1.0.1), or manually from the Actions tab.
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+permissions:
+  contents: write # lets electron-builder create the Release with the built-in token
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build and publish installer
+        run: npx electron-builder --win --publish always
+        env:
+          # The built-in token has write access to THIS repo's releases, so no
+          # personal access token is needed. electron-builder reads the publish
+          # target (this repo) from package.json's build.publish.
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

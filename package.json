@@ -1,0 +1,42 @@
+{
+  "name": "techlyfe-pos-desktop",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Tech Lyfe TT POS — desktop shell",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder --win",
+    "dist:portable": "electron-builder --win portable",
+    "release": "electron-builder --win --publish always"
+  },
+  "build": {
+    "appId": "tt.techlyfe.pos",
+    "productName": "Tech Lyfe TT POS",
+    "files": ["main.js", "preload.js", "config.example.json"],
+    "win": {
+      "target": ["nsis"],
+      "icon": "icon.png"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true
+    },
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "techlyfett-blip",
+        "repo": "techlyfe-pos-releases"
+      }
+    ]
+  },
+  "devDependencies": {
+    "electron": "^33.0.0",
+    "electron-builder": "^25.0.0"
+  },
+  "dependencies": {
+    "electron-updater": "^6.3.9"
+  }
+}
